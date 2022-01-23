@@ -39,7 +39,7 @@ jobs:
       
       - name: Build and push docker image
         run: |
-          buildctl build --frontend=dockerfile.v0 --opt platform=linux/arm/v6,linux/arm/v7 --local context=. --local dockerfile=. --output type=image,name=docker.io/trutatuta/zadanie2:kit,push=true
+          buildctl build --frontend=dockerfile.v0 --opt platform=linux/riscv64 --local context=. --local dockerfile=. --output type=image,name=docker.io/trutatuta/zadanie2:kit,push=true
            
           
           
