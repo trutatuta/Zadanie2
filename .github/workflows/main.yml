@@ -32,15 +32,15 @@ jobs:
       
       - name: Build docker image
         run: |
-          DOCKER_BUILDKIT=1 docker build -f dockerfile.v1 -t zadanie2 .
+          DOCKER_BUILDKIT=1 docker build -f dockerfile.v1 -t zadanie2:1 .
           
       - name: Tag docker image
         run: |
-          docker tag zadanie2:latest trutatuta/zadanie2:latest 
+          docker tag zadanie2:1 trutatuta/zadanie2:1 
           
       - name: Push docker image
         run: |
-          docker push trutatuta/zadanie2:latest 
+          docker push trutatuta/zadanie2:1 
           
       - name: Image digest
         run: echo ${{steps.docker_build.outputs.digest}}
