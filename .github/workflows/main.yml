@@ -29,7 +29,7 @@ jobs:
           username: ${{secrets.DOCKER_HUB_USERNAME}}
           password: ${{secrets.DOCKER_HUB_ACCESS_TOKEN}}
           push: true
-          tags: zadanie2:first
+          tags: trutatuta/zadanie2:first
           
       - name: Image digest
         run: echo ${{steps.docker_build.outputs.digest}}
