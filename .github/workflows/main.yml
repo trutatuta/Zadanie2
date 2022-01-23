@@ -33,7 +33,7 @@ jobs:
         with:
           dockerfile: ./dockerfile.v1
           push: true
-          tags: trutatuta/zadanie2:first
+          tags: zadanie2:first
           
       - name: Image digest
         run: echo ${{steps.docker_build.outputs.digest}}
