@@ -25,12 +25,11 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v1
         with:
-          context: ./
           dockerfile: ./dockerfile.v1
           username: ${{secrets.DOCKER_HUB_USERNAME}}
           password: ${{secrets.DOCKER_HUB_ACCESS_TOKEN}}
           push: true
-          tags: trutatuta/zadanie2:first
+          tags: zadanie2:first
           
       - name: Image digest
         run: echo ${{steps.docker_build.outputs.digest}}
