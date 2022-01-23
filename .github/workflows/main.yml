@@ -39,7 +39,7 @@ jobs:
       
       - name: Build and push docker image
         run: |
-          buildctl build --frontend=dockerfile.v0 --local centext=. --local dockerfile=dockerfile.v1 --output type=image,name=docker.io/trutatuta/zadanie2:kit, push=true
+          buildctl build --frontend=dockerfile.v1 --local centext=. --local dockerfile=. --output type=image,name=docker.io/trutatuta/zadanie2:kit,push=true
            
           
           
