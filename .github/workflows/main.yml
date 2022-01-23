@@ -27,15 +27,9 @@ jobs:
             | jq -r 'map(select(.name|startswith("v")))|sort_by(.name)[-1].assets[]|select(.name|endswith(".linux-amd64.tar.gz")).browser_download_url')"
           curl -L "${BUILDKIT_URL}" | sudo tar -xz -C /usr/local
           
-      - name: Start buildkit daemon
+      - name: Buildkit running
         run: |
-          sudo --non-interactive --shell <<END_SUDO
-            install -d -m 0750 -o root -g docker /run/buildkit
-            buildkitd &
-            while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done
-            chgrp docker /run/buildkit/buildkitd.sock
-          END_SUDO
-          docker ps
+          docker run --rm --privileged -d --name buildkit moby/buildkit
       
       - name: Build and push docker image
         run: |
