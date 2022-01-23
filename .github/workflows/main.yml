@@ -17,11 +17,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - uses: actions/cache@v1
-        with:
-          path: ${{ env.BUILD_CACHE }}
-          key: ${{ hashFiles('Dockerfile') }}
-        
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
@@ -48,10 +43,7 @@ jobs:
         run: |
           buildctl build \
             --frontend=dockerfile.v1 --local dockerfile=. --local context=. \
-            --export-cache type=local,dest=${BUILD_CACHE},mode=max \
-            --import-cache type=local,src=${BUILD_CACHE} \
             --output type=image,name=docker.io/trutatuta/zadanie2:2 | docker load
-          echo "Cache size: $(du -sh ${BUILD_CACHE})"
           
           
       - name: Image digest
