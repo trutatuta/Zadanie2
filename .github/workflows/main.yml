@@ -23,16 +23,20 @@ jobs:
           
       - name: Install the latest buildkit release
         run: |
-          BUILDKIT_URL="$(curl -sL https://api.github.com/repos/moby/buildkit/releases \
-            | jq -r 'map(select(.name|startswith("v")))|sort_by(.name)[-1].assets[]|select(.name|endswith(".linux-amd64.tar.gz")).browser_download_url')"
-          curl -L "${BUILDKIT_URL}" | sudo tar -xz -C /usr/local
+          wget -q https://github.com/moby/buildkit/releases/download/v0.9.3/buildkit-v0.9.3.linux-amd64.tar.gz
+          tar -zxf buildkit-v0.9.3.linux-amd64.tar.gz
+          export PATH=$PATH:/buildkit-v0.9.3.linux-amd64
+          
+      - name: Buildkit running
+        run: |
+          docker run --rm --privileged -d --name buildkit moby/buildkit
+          
           
       
       - name: Build and push docker image
         run: |
-          DOCKER_BUILDKIT=1 docker build -f dockerfile.v1 -t zadanie2:1 .
-          docker tag zadanie2:1 trutatuta/zadanie2:1 
-          docker push trutatuta/zadanie2:1 
+          buildctl build --frontend=dockerfile.v0 --local centext=. --local dockerfile=dockerfile.v1 --output type=image,name=docker.io/trutatuta/zadanie2:kit, push=true
+          
           
           
       - name: Image digest
