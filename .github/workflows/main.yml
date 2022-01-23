@@ -30,7 +30,7 @@ jobs:
       - name: Start buildkit daemon
         run: |
           sudo --non-interactive --shell <<END_SUDO
-            install all -d -m 0750 -o root -g docker /run/buildkit
+            install -d -m 0750 -o root -g docker /run/buildkit
             buildkitd &
             while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done
             chgrp docker /run/buildkit/buildkitd.sock
@@ -39,7 +39,7 @@ jobs:
       
       - name: Build and push docker image
         run: |
-          buildctl build --frontend=dockerfile.v0 --local context=. --local dockerfile=. --opt platform=linux/amd64 --output type=image,name=docker.io/trutatuta/zadanie2:kit,push=true
+          buildctl build --frontend=dockerfile.v0 --local context=. --local dockerfile=. --opt platform=linux/amd64,linux/386 --output type=image,name=docker.io/trutatuta/zadanie2:kit,push=true
            
           
           
