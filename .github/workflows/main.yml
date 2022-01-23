@@ -40,7 +40,8 @@ jobs:
       
       - name: Build docker image
         run: |
-          buildctl build --frontend=dockerfile.v1 --local dockerfile=. --local context=. --local dockerfile=. --output type=image, name=docker.io/trutatuta/zadanie2:kit,push=true
+          DOCKER_BUILDKIT=1 docker build -f dockerfile.v1 -t zadanie2 .\
+          docker push trutatuta/zadanie2:latest
           
       - name: Image digest
         run: echo ${{steps.docker_build.outputs.digest}}
