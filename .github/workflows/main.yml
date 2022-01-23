@@ -32,12 +32,12 @@ jobs:
         run: |
           docker run --rm --privileged -d --name buildkit moby/buildkit
           docker ps
-          export BUILDKIT_HOST=docker-container://buildkit
           
           
       
       - name: Build and push docker image
         run: |
+          export BUILDKIT_HOST=docker-container://buildkit
           buildctl build --frontend=dockerfile.v0 --local centext=. --local dockerfile=dockerfile.v1 --output type=image,name=docker.io/trutatuta/zadanie2:kit, push=true
           
           
