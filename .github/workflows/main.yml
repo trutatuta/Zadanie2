@@ -26,10 +26,12 @@ jobs:
           wget -q https://github.com/moby/buildkit/releases/download/v0.9.3/buildkit-v0.9.3.linux-amd64.tar.gz
           tar -zxf buildkit-v0.9.3.linux-amd64.tar.gz
           export PATH=$PATH:/buildkit-v0.9.3.linux-amd64
+          echo $PATH
           
       - name: Buildkit running
         run: |
           docker run --rm --privileged -d --name buildkit moby/buildkit
+          docker ps
           export BUILDKIT_HOST=docker-container://buildkit
           
           
