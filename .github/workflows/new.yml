@@ -31,6 +31,15 @@ jobs:
           docker run --rm --privileged -d --name buildkit moby/buildkit
           export BUILDKIT_HOST=docker-container://buildkit
           
+      - name: Start buildkit daemon
+        run: |
+          sudo --non-interactive --shell <<END_SUDO
+            install -d -m 0750 -o root -g docker /run/buildkit
+            buildkitd &
+            while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done
+            chgrp docker /run/buildkit/buildkitd.sock
+          END_SUDO
+          
       
       - name: Build docker image
         run: |
