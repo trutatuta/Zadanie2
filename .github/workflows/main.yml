@@ -22,16 +22,27 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          
+      - name: Install the latest buildkit release
+        run: |
+          BUILDKIT_URL="$(curl -sL https://api.github.com/repos/moby/buildkit/releases \
+            | jq -r 'map(select(.name|startswith("v")))|sort_by(.name)[-1].assets[]|select(.name|endswith(".linux-amd64.tar.gz")).browser_download_url')"
+          curl -L "${BUILDKIT_URL}" | sudo tar -xz -C /usr/local
+          
+      - name: Start buildkit daemon
+        run: |
+          sudo --non-interactive --shell <<END_SUDO
+            install -d -m 0750 -o root -g docker /run/buildkit
+            buildkitd &
+            while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done
+            chgrp docker /run/buildkit/buildkitd.sock
+          END_SUDO
       
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        env:
-          DOCKER_BUILDKIT: 1
-        with:
-          context: .
-          file: dockerfile.v1
-          push: true
-          tags: trutatuta/zadanie2:buildkit
+      - name: Build docker image
+        run: |
+          buildctl build \
+            --frontend=dockerfile.v1 --local dockerfile=. --local context=. \
+            --local dockerfile=. --output type=image, name=docker.io/trutatuta/zadanie2:kit,push=true
           
       - name: Image digest
         run: echo ${{steps.docker_build.outputs.digest}}
