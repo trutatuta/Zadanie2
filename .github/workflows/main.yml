@@ -36,6 +36,7 @@ jobs:
           
       - name: Push docker image
         run: |
+          docker tag zadanie2:latest trutatuta/zadanie2:latest \
           docker push trutatuta/zadanie2:latest
           
       - name: Image digest
